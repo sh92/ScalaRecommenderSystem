@@ -1,4 +1,4 @@
-# Scala Spark Recommender System Tutorial
+# Scala Recommender System Tutorial
 
 * This is my first ttutorial for scala recommender system
 
