@@ -1,4 +1,4 @@
-package com.myrecsys.ALS
+package com.myrecsys.spark
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.ml.evaluation.RegressionEvaluator
@@ -10,7 +10,7 @@ object ALSRecSys {
 
   def parseRating(str: String): Rating = {
     val fields = str.split("\t")
-    Rating(fields(0).toInt, fields(1).toInt, fields(2).toFloat, fields(3).toLong)
+    Rating(fields(0).toInt, fields(1).toInt, fields(2).toDouble, fields(3).toLong)
   }
 
   def main(args: Array[String]): Unit = {
@@ -24,7 +24,7 @@ object ALSRecSys {
       .getOrCreate()
 
 
-    println("Loading rating...")
+    println("Loading data...")
     val data = spark.read.textFile("../ml-100k/u.data").rdd
     val ratings = spark.createDataFrame(data.map(parseRating))
     val Array(training, test) = ratings.randomSplit(Array(0.8, 0.2))
@@ -46,7 +46,7 @@ object ALSRecSys {
       .setLabelCol("rating")
       .setPredictionCol("prediction")
     val rmse = evaluator.evaluate(predictions)
-    println(s"Root-mean-square error = $rmse")
+    println(s"RMSE = $rmse")
 
     val userRecs = model.recommendForAllUsers(10)
     val users = userRecs.filter(x => x(0) == 1).collect()

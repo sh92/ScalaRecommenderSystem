@@ -1,4 +1,4 @@
-package com.myrecsys.example
+package com.myrecsys.spark
 
 import org.apache.spark.{SparkConf, SparkContext}
 

@@ -4,9 +4,9 @@ import breeze.numerics.{abs, sqrt}
 import org.apache.spark.mllib.recommendation.{MatrixFactorizationModel, Rating}
 import org.apache.spark.rdd.RDD
 
-object RecommenderMetrics {
+object Metrics {
 
-  def mae(model: MatrixFactorizationModel, data: RDD[Rating]): Double ={
+  def maeRDD(model: MatrixFactorizationModel, data: RDD[Rating]): Double ={
     val usersProducts = data.map { case Rating(userId, movieId, rating) =>
       (userId, movieId)
     }
@@ -22,7 +22,7 @@ object RecommenderMetrics {
     MAE
   }
 
-  def rmse(model: MatrixFactorizationModel, data: RDD[Rating]):Double = {
+  def rmseRDD(model: MatrixFactorizationModel, data: RDD[Rating]):Double = {
     val usersProducts = data.map { case Rating(userId, movieId, rating) =>
       (userId, movieId)
     }
@@ -37,6 +37,25 @@ object RecommenderMetrics {
       err * err
     }.mean()
     sqrt(MSE)
+  }
+
+
+  def mae(actualList: List[Double], predictList: List[Double]):Double = {
+    var errsum:Double = 0.0
+    for ((x,y) <- actualList zip predictList){
+      errsum += abs(x-y)
+    }
+    println(errsum, actualList.length)
+    errsum / actualList.length
+  }
+
+  def rmse(actualSeq: List[Double], predictSeq: List[Double]):Double = {
+    var errsum:Double = 0.0
+    for ((x,y) <- actualSeq zip predictSeq){
+      errsum += (x-y)*(x-y)
+    }
+    println(errsum, actualSeq.length)
+    sqrt(errsum / actualSeq.length)
   }
 
 }

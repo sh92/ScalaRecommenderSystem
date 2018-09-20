@@ -1,6 +1,6 @@
-package com.myrecsys.ALS
+package com.myrecsys.spark
 
-import com.myrecsys.{MovieLense, RecommenderMetrics, TopNRecommender}
+import com.myrecsys.{MovieLense, Metrics}
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.mllib.recommendation.{ALS, Rating}
 import org.apache.spark.{SparkConf, SparkContext}
@@ -31,7 +31,7 @@ object ALSReSys2 {
 
     train_ratings.unpersist(blocking = false)
 
-    println("\nTraining recommendation model...")
+    println("\nTraining model...")
 
     val rank = 8
     val numIterations = 10
@@ -44,7 +44,7 @@ object ALSReSys2 {
     for( predict <- predictions){
       println("("+predict.user+", "+predict.product+") : "+predict.rating)
     }
-    val mse = RecommenderMetrics.rmse(test_model, predictions)
+    val mse = Metrics.rmseRDD(test_model, predictions)
     println("RMSE: "+ mse)
 
     val recommendedNumber = 10

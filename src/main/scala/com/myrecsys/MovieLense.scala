@@ -6,8 +6,11 @@ import scala.io.{Codec, Source}
 
 object MovieLense {
 
-  val ratingsPath = "../ml-100k/u.data"
-  val moviesPath = "../ml-100k/u.item"
+  val data_dir = "../ml-100k/"
+  val ratingsPath = data_dir+"u.data"
+  val ratingsSplit = "\t"
+  val moviesPath = data_dir+"u.item"
+  val moviesSplit = "|"
 
   var movieDict : Map[Int,String]= Map()
   var ratingDict : Map[(Int,Int),Double ]= Map()
@@ -20,7 +23,7 @@ object MovieLense {
 
     val lines = Source.fromFile(moviesPath).getLines()
     for (line <- lines) {
-      val fields = line.split('|')
+      val fields = line.split(moviesSplit)
       if (fields.length > 1) {
         movieDict += (fields(0).toInt -> fields(1))
       }
@@ -36,7 +39,7 @@ object MovieLense {
 
     val lines = Source.fromFile(ratingsPath).getLines()
     for (line <- lines) {
-      val fields = line.split('|')
+      val fields = line.split(ratingsSplit)
       if (fields.length > 1) {
         ratingDict += ( (fields(0).toInt,fields(1).toInt) -> fields(2).toDouble )
       }

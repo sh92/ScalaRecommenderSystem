@@ -1,4 +1,4 @@
-package com.myrecsys
+package com.myrecsys.spark
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkContext
